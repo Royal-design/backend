@@ -19,9 +19,11 @@
 
 // importing method from math filter:
 
-const { add, divide, multiply, subtract } = require("./math");
+const { add, divide, multiply, subtract, name } = require("./math");
 
 console.log(add(2, 6));
 console.log(subtract(2, 6));
 console.log(multiply(2, 6));
 console.log(divide(2, 6));
+
+console.log(name);
