@@ -19,3 +19,10 @@ fs.writeFile(path.join(__dirname, "new", "write.txt"), "hi Emmanuel", (err) => {
 //     console.log("directory removed");
 //   });
 // }
+
+if (!fs.existsSync("./send")) {
+  fs.mkdir("./send", (err) => {
+    if (err) throw err;
+    console.log("cre successfully");
+  });
+}
