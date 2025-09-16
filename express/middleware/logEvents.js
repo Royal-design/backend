@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const logEvents = async (message, logName) => {
+export const logEvents = async (message, logName) => {
   const dateTime = `${format(new Date(), "yyyyMMdd\tHH:mm:ss")}`;
   const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
   console.log(logItem);
@@ -33,5 +33,3 @@ export const logger = (req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
 };
-
-export default logEvents;
