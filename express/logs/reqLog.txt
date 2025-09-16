@@ -71,3 +71,6 @@
 20250916	17:44:53	175874e3-e4f9-482f-b943-5b1b13f3b287	GET	undefined	/index
 20250916	17:44:54	cdaa3049-034e-475b-9cd4-6ecfd4e96790	GET	undefined	/.well-known/appspecific/com.chrome.devtools.json
 20250916	17:44:54	cb209390-26ac-4244-b454-26062c00070a	GET	undefined	/css/style.css
+20250916	17:55:57	dbe6cfc9-9381-44f2-a3f6-52d433c259db	GET	no-origin	/index
+20250916	17:55:58	ddfc8f11-c93f-4045-85a7-180f7966942f	GET	no-origin	/.well-known/appspecific/com.chrome.devtools.json
+20250916	17:55:58	f5421f4c-0f4d-4868-87b5-e87c0ce86e29	GET	no-origin	/css/style.css
