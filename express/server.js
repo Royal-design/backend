@@ -4,6 +4,9 @@ import { fileURLToPath } from "url";
 import { logger } from "./middleware/logEvents.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorhandler.js";
+import router from "./routes/subdir.js";
+import rootRouter from "./routes/root.js";
+import employeesRouter from "./routes/api/employees.js";
 
 const app = express();
 const PORT = 8000;
@@ -22,9 +25,7 @@ const whiteLists = ["https://www.yoursite.com", "http://localhost:8000"];
 const corsOptions = {
   origin: (origin, callback) => {
     // allow requests with no origin (like mobile apps, curl, Postman)
-    if (!origin) {
-      return callback(null, true);
-    }
+    if (!origin) return callback(null, true);
     if (whiteLists.includes(origin)) {
       callback(null, true);
     } else {
@@ -43,15 +44,21 @@ app.use(express.json());
 
 // serve static file
 app.use(express.static(path.join(__dirname, "/public")));
+app.use("/subdir", express.static(path.join(__dirname, "/public")));
+
+// route
+app.use("/subdir", router);
+app.use("/", rootRouter);
+app.use("/employees", employeesRouter);
 
 // regex route pattern
 app.get("/about", (req, res) => {
   res.send("This is about page");
 });
 
-app.get(/^\/index(.html)?$/, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
-});
+// app.get(/^\/index(.html)?$/, (req, res) => {
+//   res.sendFile(path.join(__dirname, "views", "index.html"));
+// });
 
 app.get(/^\/ab?cd$/, (req, res) => {
   res.send("This is route acd or abcd");
@@ -65,13 +72,13 @@ app.get(/^\/ab.*cd$/, (req, res) => {
 
 // redirect
 
-app.get(/^\/new-page(.html)?$/, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "new-page.html"));
-});
+// app.get(/^\/new-page(.html)?$/, (req, res) => {
+//   res.sendFile(path.join(__dirname, "views", "new-page.html"));
+// });
 
-app.get("/old-page", (req, res) => {
-  res.redirect(301, "/new-page.html");
-});
+// app.get("/old-page", (req, res) => {
+//   res.redirect(301, "/new-page.html");
+// });
 
 //  route handler
 
