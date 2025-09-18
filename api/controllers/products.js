@@ -6,8 +6,8 @@ const getAllProducts = (req, res) => {
   let { search = "", pageSize = "10", page = "1" } = req.query;
 
   // convert them into numbers
-  pageSize = parseInt(pageSize, 10);
-  page = parseInt(page, 10);
+  pageSize = +pageSize;
+  page = +page;
 
   // sanitize: prevent invalid values
   if (isNaN(pageSize) || pageSize <= 0) pageSize = 10;
