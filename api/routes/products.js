@@ -6,12 +6,27 @@ import {
   getProductById,
   updateProduct,
 } from "../controllers/products.js";
+import { validate } from "../middleware/validate.js";
+import {
+  productSchema,
+  updateProductSchema,
+} from "../schemas/productSchema.js";
 
 const router = express.Router();
+
+// Get all products
 router.get("/", getAllProducts);
-router.post("/create", createProduct);
-router.put("/update/:id", updateProduct);
+
+// Create product (validate full schema)
+router.post("/create", validate(productSchema), createProduct);
+
+// Update product (validate partial schema)
+router.put("/update/:id", validate(updateProductSchema), updateProduct);
+
+// Delete product
 router.delete("/delete/:id", deleteProduct);
+
+// Get single product by id
 router.get("/:id", getProductById);
 
 export default router;

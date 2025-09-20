@@ -2,14 +2,19 @@ import express from "express";
 import students from "./routes/students.js";
 import teachers from "./routes/teachers.js";
 import products from "./routes/products.js";
+import register from "./routes/register.js";
+import auth from "./routes/auth.js";
 
 const PORT = 8000;
 const app = express();
+
 app.use(express.json());
 
 app.use("/students", students);
 app.use("/teachers", teachers);
 app.use("/products", products);
+app.use("/register", register);
+app.use("/auth", auth);
 
 app.param("id", (req, res, next, value, name) => {
   console.log(`Param ${name} = ${value}`);
