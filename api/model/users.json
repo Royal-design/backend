@@ -1,1 +1,20 @@
-[{"id":1,"user":"admin","pwd":"123456"},{"id":2,"user":"john","pwd":"password"},{"id":3,"user":"Adebola","pwd":"$2b$10$bCwYCQ.OO4nbAoN7xLTeee.To8oT69LSiE1q6ED59jJFSHtUCQDuS"}]
+[
+  {
+    "id": 1,
+    "user": "admin",
+    "pwd": "$2b$10$vMNXpQMz9YPDE.OIX1R5/Oe11FvU3/2RxdgE1dL0HGPpGPTgXWZkK",
+    "refreshToken": ""
+  },
+  {
+    "id": 2,
+    "user": "john",
+    "pwd": "$2b$10$kL5IqYt8IkmCfBIep1csYuXrEd5CdFXNHCh1TJtDPns.oYjMtiXhe",
+    "refreshToken": ""
+  },
+  {
+    "id": 3,
+    "user": "Emmy",
+    "pwd": "$2b$10$KGDoVJB2LZszbrkadCc7luOLh7qOHthKJrL/MQLQ8UeiOUpzq0MCC",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiRW1teSIsImlhdCI6MTc1ODc0NTQ3OCwiZXhwIjoxNzU4ODMxODc4fQ.aAfCqULL1-5eGFAzKBnajzTrEzwVjkqbxD9ir7kDRhE"
+  }
+]

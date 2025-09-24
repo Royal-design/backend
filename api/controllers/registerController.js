@@ -7,6 +7,7 @@ import { users } from "../data/users.js";
 
 const __fileName = fileURLToPath(import.meta.url);
 const __baseName = path.dirname(__fileName);
+const usersFilePath = path.join(__baseName, "..", "model", "users.json");
 
 export const handleNewUser = async (req, res) => {
   const { user, pwd } = req.body;
@@ -31,18 +32,17 @@ export const handleNewUser = async (req, res) => {
   try {
     const hashedPwd = await bcrypt.hash(pwd, 10);
     const newUser = { id: users.length + 1, user, pwd: hashedPwd };
+
+    // Add to in-memory array
     users.push(newUser);
 
+    // // Save full array to JSON file
     // await fsPromises.mkdir(path.join(__baseName, "..", "model"), {
     //   recursive: true,
     // });
+    // await fsPromises.writeFile(usersFilePath, JSON.stringify(users, null, 2));
 
-    // await fsPromises.writeFile(
-    //   path.join(__baseName, "..", "model", "users.json"),
-    //   JSON.stringify(users)
-    // );
-
-    console.log(users);
+    // console.log("Users after adding new:", users);
     return sendSuccess(res, newUser, "New user added", 201);
   } catch (error) {
     return sendError(res, error.message || "Server error", 500);
