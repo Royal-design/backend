@@ -9,7 +9,7 @@ export const handleRefreshToken = async (req, res) => {
   if (!cookies?.jwt) return res.sendStatus(401);
 
   const refreshToken = cookies.jwt;
-  const users = JSON.parse(await fsPromises.readFile(usersFile, "utf-8"));
+  const users = JSON.parse(await fsPromises.readFile(usersFile, "utf8"));
 
   const foundUser = users.find((u) => u.refreshToken === refreshToken);
   if (!foundUser) return res.sendStatus(403);
@@ -18,7 +18,7 @@ export const handleRefreshToken = async (req, res) => {
     if (err || foundUser.user !== decoded.user) return res.sendStatus(403);
 
     const accessToken = jwt.sign(
-      { id: foundUser.id, user: foundUser.user },
+      { user: decoded.user },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1m" }
     );

@@ -47,8 +47,8 @@ export const handleLogin = async (req, res) => {
   // Set secure cookie
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
-    // secure: process.env.NODE_ENV === 'production',
-    // sameSite: 'strict',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
     maxAge: 24 * 60 * 60 * 1000,
   });
 

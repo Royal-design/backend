@@ -4,6 +4,7 @@ dotenv.config();
 // Then import other stuff
 import cookieParser from "cookie-parser";
 import express from "express";
+import cors from "cors";
 import students from "./routes/students.js";
 import teachers from "./routes/teachers.js";
 import products from "./routes/products.js";
@@ -11,12 +12,14 @@ import register from "./routes/register.js";
 import auth from "./routes/auth.js";
 import users from "./routes/users.js";
 import refresh from "./routes/refresh.js";
+import logout from "./routes/logout.js";
+import { corsOptions } from "./config/corsOptions.js";
 
 // Create app
 const app = express();
 
 const PORT = 8000;
-
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -27,6 +30,7 @@ app.use("/register", register);
 app.use("/auth", auth);
 app.use("/users", users);
 app.use("/refresh", refresh);
+app.use("/logout", logout);
 
 app.get("/read-cookie", (req, res) => {
   const token = req.cookies.jwt; // 👈 read cookie named "jwt"
