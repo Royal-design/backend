@@ -4,6 +4,7 @@ import path from "path";
 import * as fsPromises from "fs/promises";
 import { sendError, sendSuccess } from "../helper/response.js";
 import { users } from "../data/users.js";
+import { Roles_List } from "../config/roles_list.js";
 
 const __fileName = fileURLToPath(import.meta.url);
 const __baseName = path.dirname(__fileName);
@@ -31,7 +32,13 @@ export const handleNewUser = async (req, res) => {
 
   try {
     const hashedPwd = await bcrypt.hash(pwd, 10);
-    const newUser = { id: users.length + 1, user, pwd: hashedPwd };
+    const newUser = {
+      id: users.length + 1,
+      user,
+      pwd: hashedPwd,
+      refreshToken: "",
+      roles: [Roles_List.User],
+    };
 
     // Add to in-memory array
     users.push(newUser);

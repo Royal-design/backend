@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 
-const hashedAdminPwd = await bcrypt.hash("123456", 10);
-const hashedJohnPwd = await bcrypt.hash("password", 10);
+const hashedAdminPwd = await bcrypt.hash("password", 10);
 
 export const users = [
   {
@@ -9,11 +8,13 @@ export const users = [
     user: "admin",
     pwd: hashedAdminPwd,
     refreshToken: "",
+    roles: ["Admin", "User", "Editor"],
   },
   {
     id: 2,
     user: "john",
-    pwd: hashedJohnPwd,
+    pwd: hashedAdminPwd,
     refreshToken: "",
+    roles: ["Editor"],
   },
 ];

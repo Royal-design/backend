@@ -14,6 +14,8 @@ import users from "./routes/users.js";
 import refresh from "./routes/refresh.js";
 import logout from "./routes/logout.js";
 import { corsOptions } from "./config/corsOptions.js";
+import { verifyRoles } from "./middleware/verifyRoles.js";
+import { verifyJWT } from "./middleware/verifyJWT.js";
 
 // Create app
 const app = express();
@@ -35,6 +37,14 @@ app.use("/logout", logout);
 app.get("/read-cookie", (req, res) => {
   const token = req.cookies.jwt; // 👈 read cookie named "jwt"
   res.send({ token });
+});
+
+app.get("/admin", verifyJWT, verifyRoles("Admin"), (req, res) => {
+  res.send("Welcome, Admin!");
+});
+
+app.get("/editor", verifyJWT, verifyRoles("Editor", "Admin"), (req, res) => {
+  res.send("Welcome, Editor!");
 });
 
 // app.param("id", (req, res, next, value, name) => {

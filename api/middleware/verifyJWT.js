@@ -11,6 +11,7 @@ export const verifyJWT = (req, res, next) => {
 
     req.user = {
       user: decoded.user,
+      roles: decoded.roles || [],
     };
 
     next();

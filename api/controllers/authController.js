@@ -25,7 +25,7 @@ export const handleLogin = async (req, res) => {
 
   // Generate tokens
   const accessToken = jwt.sign(
-    { user: foundUser.user },
+    { user: foundUser.user, roles: foundUser.roles },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "1m" }
   );
