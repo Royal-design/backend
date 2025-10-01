@@ -2,11 +2,11 @@
   "name": "crud",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon server.ts",
+    "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +18,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.3",
     "zod": "^4.1.11"
   },
   "devDependencies": {

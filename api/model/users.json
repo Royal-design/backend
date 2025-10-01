@@ -2,8 +2,8 @@
   {
     "id": 1,
     "user": "admin",
-    "pwd": "$2b$10$dGUhFiZzHqUMuyDmg7Rkberi739wWj6/SVO.YlhOTQO0tYl7uQYWy",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW4iLCJpYXQiOjE3NTg5MTU5OTQsImV4cCI6MTc1OTAwMjM5NH0.psGJu5lSfBDGmMTaJw-UwkkdwE5iaj9u7a3EFqIdMRQ",
+    "pwd": "$2b$10$busbIfE8CfWGBDaooRDw4OkuQFF81wSttb2qfsiauualjqtsxpF5W",
+    "refreshToken": "",
     "roles": [
       "Admin",
       "User",
@@ -13,10 +13,19 @@
   {
     "id": 2,
     "user": "john",
-    "pwd": "$2b$10$dGUhFiZzHqUMuyDmg7Rkberi739wWj6/SVO.YlhOTQO0tYl7uQYWy",
+    "pwd": "$2b$10$busbIfE8CfWGBDaooRDw4OkuQFF81wSttb2qfsiauualjqtsxpF5W",
     "refreshToken": "",
     "roles": [
       "Editor"
+    ]
+  },
+  {
+    "id": 3,
+    "user": "Emmy",
+    "pwd": "$2b$10$1zMPvSf5RAh2zMEO7PEAPOYw/BGBJA/WhJByGrOOBQV7vs1sEoKBa",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiRW1teSIsImlhdCI6MTc1ODkxNjA3NCwiZXhwIjoxNzU5MDAyNDc0fQ.Nez_mFd_Lors7KJ7sTZ9EyUkhrqW--UtLZZuC8V2p9I",
+    "roles": [
+      "User"
     ]
   }
 ]

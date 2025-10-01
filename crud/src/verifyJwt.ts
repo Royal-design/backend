@@ -16,7 +16,6 @@ export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
         email: decoded.email as string,
       };
     }
-
     next();
   });
 };

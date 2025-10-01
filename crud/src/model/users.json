@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Ife",
+    "email": "ade@gmail.com",
+    "phoneNumber": "08123432312",
+    "password": "$2b$10$Hov6LDJkkD8kcdR4HGyxM.1RFenMHxIf6ifQ5OO2ALxyjKhXyGl5m",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSWZlIiwiZW1haWwiOiJhZGVAZ21haWwuY29tIiwiaWF0IjoxNzU5MzE5ODkwLCJleHAiOjE3NTk0MDYyOTB9.aD6zD1KiQQvV8UB2tNhWxpChVNTyJaxoYYEghVQUMz8"
+  }
+]

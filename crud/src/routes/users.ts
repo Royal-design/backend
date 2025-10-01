@@ -1,7 +1,7 @@
 import express from "express";
 
 import { getUsers } from "../controller/userController";
-import { verifyJwt } from "../middleware/verifyJwt";
+import { verifyJwt } from "../verifyJwt";
 
 const router = express.Router();
 

@@ -43,9 +43,14 @@ app.get("/admin", verifyJWT, verifyRoles("Admin"), (req, res) => {
   res.send("Welcome, Admin!");
 });
 
-app.get("/editor", verifyJWT, verifyRoles("Editor", "Admin"), (req, res) => {
-  res.send("Welcome, Editor!");
-});
+app.get(
+  "/editor",
+  verifyJWT,
+  verifyRoles("Editor", "Admin", "User"),
+  (req, res) => {
+    res.send("Welcome, Editor!");
+  }
+);
 
 // app.param("id", (req, res, next, value, name) => {
 //   console.log(`Param ${name} = ${value}`);

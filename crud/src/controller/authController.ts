@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import express, { Response, Request } from "express";
 import bcrypt from "bcrypt";
-import { sendError, sendSuccess } from "../utils/status";
+import { sendError, sendSuccess } from "../schemas/utils/status";
 import fsPromises from "fs/promises";
-import { usersFile } from "../utils/file";
+import { usersFile } from "../schemas/utils/file";
 
 export const authController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -20,7 +20,7 @@ export const authController = async (req: Request, res: Response) => {
   const foundUser = users.find((user) => user.email === email);
   if (!foundUser) return sendError(res, 401, "Unauthorized user");
 
-  const isMatched = bcrypt.compare(password, foundUser.password);
+  const isMatched = await bcrypt.compare(password, foundUser.password);
   if (!isMatched) return sendError(res, 401, "Unauthorized user");
 
   const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
@@ -47,10 +47,12 @@ export const authController = async (req: Request, res: Response) => {
     { expiresIn: "1d" }
   );
 
+  foundUser.refreshToken = refreshToken;
+  await fsPromises.writeFile(usersFile, JSON.stringify(users, null, 2));
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "strict",
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 
