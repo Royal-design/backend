@@ -17,6 +17,7 @@ export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
         id: decoded.id,
         name: decoded.name,
         email: decoded.email,
+        roles: decoded.roles,
       };
     }
     next();

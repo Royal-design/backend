@@ -19,6 +19,7 @@ export const handleRegister = async (
     const newUser = await User.create({
       ...req.body,
       password: hashedPw,
+      roles: ["user"],
       refreshToken: "",
     });
 

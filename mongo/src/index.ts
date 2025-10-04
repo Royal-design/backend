@@ -12,6 +12,7 @@ import auth from "./routes/auth";
 import users from "./routes/users";
 import refresh from "./routes/refresh";
 import logout from "./routes/logout";
+import roles from "./routes/roles";
 
 import { verifyJwt } from "./middleware/verifyJwt";
 
@@ -23,6 +24,7 @@ const app = express();
 app.use(cors(corsOption));
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // routes
 app.use("/register", register);
@@ -31,8 +33,11 @@ app.use("/refresh", refresh);
 app.use("/logout", logout);
 
 app.use(verifyJwt);
+
 // verified route
 app.use("/users", users);
+app.use("/users", users);
+app.use("/roles", roles);
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDb");

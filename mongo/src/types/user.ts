@@ -1,5 +1,6 @@
 import { Document } from "mongoose";
 
+export type Role = "admin" | "user" | "moderator";
 export interface UserType extends Document {
   name: string;
   email: string;
@@ -7,5 +8,6 @@ export interface UserType extends Document {
   password: string;
   refreshToken?: string;
   createdAt: Date;
+  roles: Role[];
   updatedAt: Date;
 }

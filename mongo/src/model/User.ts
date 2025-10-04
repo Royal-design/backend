@@ -7,6 +7,12 @@ const userSchema = new Schema<UserType>(
     email: { type: String, required: true, unique: true },
     phoneNumber: { type: String, required: true },
     password: { type: String, required: true },
+    roles: {
+      type: [String],
+      required: true,
+      enum: ["admin", "user", "moderator"],
+      default: ["user"],
+    },
     refreshToken: String,
   },
   { timestamps: true }

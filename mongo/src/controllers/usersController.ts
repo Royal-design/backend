@@ -7,15 +7,33 @@ export const getUsers = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const pageSize = parseInt(req.query.pageSize as string) || 10;
     const skip = (page - 1) * pageSize;
+    const search = (req.query.search as string) || "";
 
-    const totalUsers = await User.countDocuments();
+    const searchRegex = new RegExp(search, "i");
 
-    // Fetch paginated users
-    const users = await User.find()
-      .skip(skip)
-      .limit(pageSize)
+    let query = User.find()
       .select("-password -refreshToken -__v")
-      .lean();
+      .skip(skip)
+      .limit(pageSize);
+
+    let countQuery = User.find();
+
+    if (search.trim() !== "") {
+      query = query.or([
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+      ]);
+
+      countQuery = countQuery.or([
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+      ]);
+    }
+
+    const [users, totalUsers] = await Promise.all([
+      query.lean(),
+      countQuery.countDocuments(),
+    ]);
 
     const totalPages = Math.ceil(totalUsers / pageSize);
 

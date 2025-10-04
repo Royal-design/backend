@@ -23,9 +23,14 @@ export const handleLogin = async (
     if (!accessTokenSecret || !refreshTokenSecret) return res.sendStatus(500);
 
     const accessToken = jwt.sign(
-      { id: foundUser.id, name: foundUser.name, email: foundUser.email },
+      {
+        id: foundUser.id,
+        name: foundUser.name,
+        email: foundUser.email,
+        roles: foundUser.roles,
+      },
       accessTokenSecret,
-      { expiresIn: "1m" }
+      { expiresIn: "5m" }
     );
     const refreshToken = jwt.sign({ id: foundUser.id }, refreshTokenSecret, {
       expiresIn: "1d",
@@ -40,6 +45,7 @@ export const handleLogin = async (
       id: foundUser.id,
       name: foundUser.name,
       email: foundUser.email,
+      roles: foundUser.roles,
       accessToken,
     };
     foundUser.refreshToken = refreshToken;

@@ -23,9 +23,14 @@ export const handleRefresh = async (req: Request, res: Response) => {
         if (!accessTokenSecret) return res.sendStatus(500);
 
         const accessToken = jwt.sign(
-          { id: foundUser.id, name: foundUser.name, email: foundUser.email },
+          {
+            id: foundUser.id,
+            name: foundUser.name,
+            email: foundUser.email,
+            roles: foundUser.roles,
+          },
           accessTokenSecret,
-          { expiresIn: "1m" }
+          { expiresIn: "5m" }
         );
         return res.json({ accessToken });
       }
