@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { sendError, sendSuccess } from "../utils/response";
 import { User } from "../model/User";
+import cloudinary from "../config/cloudinary";
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -56,5 +57,39 @@ export const getUsers = async (req: Request, res: Response) => {
       500,
       "Internal server error. Please try again later."
     );
+  }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (!id) return sendError(res, 400, "User id is required");
+
+    const foundUser = await User.findById(id);
+    if (!foundUser) return sendError(res, 404, "User not found");
+
+    const updateData = { ...req.body };
+
+    // Handle profile image
+    if (req.file) {
+      if (foundUser.profileImage?.publicId) {
+        await cloudinary.uploader.destroy(foundUser.profileImage.publicId);
+      }
+
+      updateData.profileImage = {
+        url: req.file.path,
+        publicId: req.file.filename,
+      };
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    return sendSuccess(res, 200, updatedUser, "User updated successfully");
+  } catch (error: any) {
+    console.error(error);
+    return sendError(res, 500, error.message || "Failed to update user");
   }
 };

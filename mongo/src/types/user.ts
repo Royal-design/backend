@@ -7,6 +7,7 @@ export interface UserType extends Document {
   phoneNumber: string;
   password: string;
   refreshToken?: string;
+  profileImage: { url: string; publicId: string };
   createdAt: Date;
   roles: Role[];
   updatedAt: Date;

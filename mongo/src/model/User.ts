@@ -7,6 +7,10 @@ const userSchema = new Schema<UserType>(
     email: { type: String, required: true, unique: true },
     phoneNumber: { type: String, required: true },
     password: { type: String, required: true },
+    profileImage: {
+      url: { type: String, default: "" },
+      publicId: { type: String, default: "" },
+    },
     roles: {
       type: [String],
       required: true,
