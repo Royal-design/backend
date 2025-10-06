@@ -13,10 +13,10 @@ import users from "./routes/users";
 import refresh from "./routes/refresh";
 import logout from "./routes/logout";
 import roles from "./routes/roles";
+import jwt from "jsonwebtoken";
 
 import { verifyJwt } from "./middleware/verifyJwt";
 import { errorHandler } from "./middleware/errorHandler";
-import session from "express-session";
 import passport from "./config/passport";
 
 const PORT = process.env.PORT || 8000;
@@ -28,15 +28,7 @@ app.use(cors(corsOption));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret_key",
-    resave: true,
-    saveUninitialized: false,
-  })
-);
 app.use(passport.initialize());
-app.use(passport.session());
 
 // routes
 app.use("/register", register);
@@ -44,21 +36,18 @@ app.use("/auth", auth);
 app.use("/refresh", refresh);
 app.use("/logout", logout);
 
-// Google OAuth route
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+app.get("/profile", (req, res) => {
+  const token = req.query.token as string;
 
-// Google OAuth callback
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    // If authentication succeeded
-    res.redirect("/profile"); // or generate a JWT here and send it to frontend
+  if (!token) return res.status(401).json({ message: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
+    res.json({ message: "Welcome to your profile", user: decoded });
+  } catch (err) {
+    res.status(403).json({ message: "Invalid token" });
   }
-);
+});
 
 app.use(verifyJwt);
 

@@ -14,13 +14,11 @@ export const handleLogin = async (
 
     const foundUser = await User.findOne({ email: email });
     if (!foundUser) return sendError(res, 401, "Invalid email or password.");
-    const isMatched = await bcrypt.compare(password, foundUser?.password);
+
+    if (!foundUser.password)
+      return sendError(res, 401, "Invalid email or password.");
+    const isMatched = await bcrypt.compare(password, foundUser.password);
     if (!isMatched) return sendError(res, 401, "Invalid email or password.");
-
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
-
-    if (!accessTokenSecret || !refreshTokenSecret) return res.sendStatus(500);
 
     const accessToken = jwt.sign(
       {
@@ -29,16 +27,21 @@ export const handleLogin = async (
         email: foundUser.email,
         roles: foundUser.roles,
       },
-      accessTokenSecret,
+      process.env.ACCESS_TOKEN_SECRET!,
       { expiresIn: "5m" }
     );
-    const refreshToken = jwt.sign({ id: foundUser.id }, refreshTokenSecret, {
-      expiresIn: "1d",
-    });
+    const refreshToken = jwt.sign(
+      { id: foundUser.id },
+      process.env.REFRESH_TOKEN_SECRET!,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1 * 24 * 60 * 60 * 1000,
     });
     const returnUser = {

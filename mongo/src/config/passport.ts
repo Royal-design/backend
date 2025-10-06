@@ -9,19 +9,26 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: "http://localhost:8000/auth/google/callback",
     },
-    // 👇 make it async so we can use await inside
-    async (accessToken, refreshToken, profile, done) => {
+    async (_accessToken, _refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {
-          user = await User.create({
-            googleId: profile.id,
-            name: profile.displayName,
-            email: profile.emails?.[0].value,
-            profileImage: { url: profile.photos?.[0].value },
-            roles: ["user"], // 👈 assign default role
-          });
+          // Also check if user exists by email (e.g. signed up manually before)
+          user = await User.findOne({ email: profile.emails?.[0].value });
+
+          if (user) {
+            user.googleId = profile.id;
+            await user.save();
+          } else {
+            user = await User.create({
+              googleId: profile.id,
+              name: profile.displayName,
+              email: profile.emails?.[0].value,
+              profileImage: { url: profile.photos?.[0].value },
+              roles: ["user"],
+            });
+          }
         }
 
         return done(null, user);
@@ -32,18 +39,18 @@ passport.use(
   )
 );
 
-// ✅ Required for persistent login sessions
-passport.serializeUser((user: any, done) => {
-  done(null, user.id); // store only user id in the session
-});
+// ❌ Remove session serialize/deserialize if using JWT
+// passport.serializeUser((user: any, done) => {
+//   done(null, user.id); // store only user id in the session
+// });
 
-passport.deserializeUser(async (id: string, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err, null);
-  }
-});
+// passport.deserializeUser(async (id: string, done) => {
+//   try {
+//     const user = await User.findById(id);
+//     done(null, user);
+//   } catch (err) {
+//     done(err, null);
+//   }
+// });
 
 export default passport;
