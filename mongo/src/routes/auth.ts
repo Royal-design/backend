@@ -1,9 +1,8 @@
 import express from "express";
 import { validate } from "../middleware/validate";
 import { loginSchema } from "../schemas/loginSchema";
-import { handleLogin } from "../controllers/authController";
+import { handleLogin, handleSocialLogin } from "../controllers/authController";
 import passport from "../config/passport";
-import { handleGoogleLogin } from "../controllers/googleController";
 
 const router = express.Router();
 
@@ -16,7 +15,18 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
-  handleGoogleLogin
+  handleSocialLogin
+);
+
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", { session: false }),
+  handleSocialLogin
 );
 
 router.post("/", validate(loginSchema), handleLogin);

@@ -5,6 +5,35 @@ import { sendError, sendSuccess } from "../utils/response";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// -----------------------------
+// 🔐 Helper: Generate Tokens
+// -----------------------------
+function generateTokens(user: {
+  id: string;
+  name: string;
+  email: string;
+  roles: string[];
+}) {
+  const accessToken = jwt.sign(
+    {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roles: user.roles,
+    },
+    process.env.ACCESS_TOKEN_SECRET!,
+    { expiresIn: "5m" }
+  );
+
+  const refreshToken = jwt.sign(
+    { id: user.id },
+    process.env.REFRESH_TOKEN_SECRET!,
+    { expiresIn: "1d" }
+  );
+
+  return { accessToken, refreshToken };
+}
+
 export const handleLogin = async (
   req: Request<{}, {}, LoginInput>,
   res: Response
@@ -13,30 +42,18 @@ export const handleLogin = async (
     const { email, password } = req.body;
 
     const foundUser = await User.findOne({ email: email });
-    if (!foundUser) return sendError(res, 401, "Invalid email or password.");
-
-    if (!foundUser.password)
+    if (!foundUser || !foundUser.password) {
       return sendError(res, 401, "Invalid email or password.");
+    }
     const isMatched = await bcrypt.compare(password, foundUser.password);
     if (!isMatched) return sendError(res, 401, "Invalid email or password.");
 
-    const accessToken = jwt.sign(
-      {
-        id: foundUser.id,
-        name: foundUser.name,
-        email: foundUser.email,
-        roles: foundUser.roles,
-      },
-      process.env.ACCESS_TOKEN_SECRET!,
-      { expiresIn: "5m" }
-    );
-    const refreshToken = jwt.sign(
-      { id: foundUser.id },
-      process.env.REFRESH_TOKEN_SECRET!,
-      {
-        expiresIn: "1d",
-      }
-    );
+    const { accessToken, refreshToken } = generateTokens({
+      id: foundUser.id,
+      name: foundUser.name,
+      email: foundUser.email,
+      roles: foundUser.roles,
+    });
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
@@ -62,4 +79,31 @@ export const handleLogin = async (
       "Internal server error. Please try again later."
     );
   }
+};
+
+export const handleSocialLogin = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as any;
+    const { accessToken, refreshToken } = generateTokens({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roles: user.roles,
+    });
+
+    await User.findByIdAndUpdate(user.id, { refreshToken });
+
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    // res.redirect(
+    //   `http://localhost:3000/social-auth-success?token=${accessToken}`
+    // );
+
+    res.redirect(`/profile?token=${accessToken}`);
+  } catch (error) {}
 };
